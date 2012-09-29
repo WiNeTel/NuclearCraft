@@ -12,7 +12,7 @@ import net.minecraft.src.TileEntity;
 public class TileEntityElectronAccumulator extends TileEntity implements IInventory{
 	float output;
 	int i=0;
-	ItemStack[] batteryStack = new ItemStack[2];
+	ItemStack[] batteryStack = new ItemStack[getSizeInventory()];
 	private NBTTagList tagList;
 	private NBTTagList itemList;
 	int j = 0;
@@ -27,7 +27,7 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 	@Override
 	public int getSizeInventory()
 	{
-		return 1;
+		return 2;
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 	    {
 	      NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
 	      int j = nbttagcompound1.getByte("Slot") & 0xff;
-	      if (j >= 0 && j < batteryStack.length)
+	      if (j >= 0 && j < batteryStack.length+1)
 	      {
 	        batteryStack[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 	      }
