@@ -18,12 +18,14 @@ public class GuiHandler implements IGuiHandler{
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {
 		switch(ID){
-			case 0:
-				container = new ContainerSolar(player.inventory, world, x, y, z);
-				break;
-			case 1:
-				container = new ContainerElectronAccumulator(player.inventory, world, x, y, z);
-				break;
+		case 0:
+			container = new ContainerSolar(player.inventory, world, x, y, z);
+			break;
+		case 1:
+			container = new ContainerElectronAccumulator(player.inventory, world, x, y, z);
+			break;
+		case 2:
+			container = new ContainerCentrifugeEnrichner(player.inventory, world, x, y, z);
 		}
 		return container;
 	}
@@ -36,8 +38,11 @@ public class GuiHandler implements IGuiHandler{
 			break;
 		case 1:
 			gui = new GuiElectronAccumulator(player.inventory, world, x, y, z);
+			break;
+		case 2:
+			gui = new GuiCentrifugeEnrichner(player.inventory, world, x, y, z);
+			break;
 		}
-		
 		return gui;
 	}
 

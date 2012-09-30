@@ -14,32 +14,28 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiSolar extends GuiContainer{
-	TileEntitySolarGenerator tesg;
+public class GuiCentrifugeEnrichner extends GuiContainer{
 	World world;
-	int x, y, z;
-	public GuiSolar(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5) {
-		super(new ContainerSolar(par1InventoryPlayer, par2World, par3, par4, par5));
-		x = par3;
-		y = par4;
-		z = par5;
+	TileEntityCentrifugeEnrichner teea;
+	public GuiCentrifugeEnrichner(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5) {
+		super(new ContainerCentrifugeEnrichner(par1InventoryPlayer, par2World, par3, par4, par5));
 		world = par2World;
-		tesg = (TileEntitySolarGenerator) world.getBlockTileEntity(x, y, z);
+		teea = (TileEntityCentrifugeEnrichner) world.getBlockTileEntity(par3, par4, par5);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer()
 	{
 		DecimalFormat df = new DecimalFormat( "#########0.00");
-		String formattedValue = df.format(tesg.getEnergy());
-		this.fontRenderer.drawString("Stored " + formattedValue, 50, 37, 4210752);
-		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+		String formattedValue = df.format(teea.getEnergy());
+		this.fontRenderer.drawString("Centrifuge Enrichner", 30, 5, 4210752);
+		//this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2,
 			int var3) {
-		int var4 = this.mc.renderEngine.getTexture("/zyngawow/nuclearcraft/gui/solarGenerator.png");
+		int var4 = this.mc.renderEngine.getTexture("/zyngawow/nuclearcraft/gui/centrifugeEnrichner.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		int var5 = (this.width - this.xSize) / 2;

@@ -1,5 +1,6 @@
 package zyngawow.nuclearcraft.blocks;
 
+import zyngawow.nuclearcraft.items.Battery;
 import zyngawow.nuclearcraft.items.EnergyProvider;
 import zyngawow.nuclearcraft.items.EnergyUser;
 import net.minecraft.src.Block;
@@ -13,19 +14,26 @@ import net.minecraft.src.Slot;
 import net.minecraft.src.SlotCrafting;
 import net.minecraft.src.World;
 
-public class ContainerSolar extends Container{
+public class ContainerCentrifugeEnrichner extends Container{
 	private int posX;
 	private int posY;
 	private int posZ;
 	private World worldObj;
-	public IInventory batterySlot;
-	public ContainerSolar(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5){
+	public IInventory batterySlots;
+	public ContainerCentrifugeEnrichner(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5){
 		this.worldObj = par2World;
 		this.posX = par3;
 		this.posY = par4;
 		this.posZ = par5;
-		batterySlot = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
-		this.addSlotToContainer(new Slot(this.batterySlot , 0, 80, 57));
+		batterySlots = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
+		this.addSlotToContainer(new Slot(this.batterySlots , 0, 13, 36));
+		this.addSlotToContainer(new Slot(this.batterySlots , 1, 63, 16));
+		this.addSlotToContainer(new Slot(this.batterySlots , 2, 63, 37));
+		this.addSlotToContainer(new Slot(this.batterySlots , 3, 63, 58));
+		this.addSlotToContainer(new Slot(this.batterySlots , 4, 84, 16));
+		this.addSlotToContainer(new Slot(this.batterySlots , 5, 84, 37));
+		this.addSlotToContainer(new Slot(this.batterySlots , 6, 84, 58));
+		this.addSlotToContainer(new Slot(this.batterySlots , 7, 132, 37));
 		int var6;
 		int var7;
 
@@ -62,10 +70,10 @@ public class ContainerSolar extends Container{
 
 			if (par1 != 0 && par1 != 1)
 			{
-				if (var4.getItem() instanceof EnergyProvider || var4.getItem() instanceof EnergyUser)
+				if (var4.getItem() instanceof EnergyProvider)
 				{
 					if (((EnergyProvider)var4.getItem()) != null){
-						if (!this.mergeItemStack(var4, 1, 0, false)){
+						if (!this.mergeItemStack(var4, 1, 2, false)){
 							return null;
 						}
 					}else{
@@ -80,8 +88,8 @@ public class ContainerSolar extends Container{
 						}
 					}
 					else{if(!mergeItemStack(var4, 0, 1, false)){
-						return null;
-					}
+							return null;
+						}
 					}
 				}
 				else if(par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))

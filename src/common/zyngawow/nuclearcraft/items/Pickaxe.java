@@ -23,7 +23,7 @@ public class Pickaxe extends EnergyUser{
 	}
 	public String getTextureFile()
 	{
-		return "/itemTextures.png";
+		return "/zyngawow/nuclearcraft/items/itemTextures.png";
 	}
 
 	@Override
@@ -31,22 +31,21 @@ public class Pickaxe extends EnergyUser{
 		this.is = is;
 		if(!player.isSneaking()){
 			if(player.rotationPitch <= -27){
-				System.out.println("Facing up");
 				if(this.modes.get(selectedMode).equals("3x3")){
 					threeByThreeUpDown(world, player, x, y, z);
 				}
-			}else if(player.rotationPitch >= 40){
+			}else if(player.rotationPitch >= 50){
 				if(this.modes.get(selectedMode).equals("3x3")){
 					threeByThreeUpDown(world, player, x, y, z);
 				}
-			}else if((Math.abs(player.rotationYaw) >= 60 && Math.abs(player.rotationYaw) < 120) || 
-					(Math.abs(player.rotationYaw) >= 240 && Math.abs(player.rotationYaw) < 300)){
+			}else if((Math.abs(player.rotationYaw) >= 51 && Math.abs(player.rotationYaw) < 135) || 
+					(Math.abs(player.rotationYaw) >= 225 && Math.abs(player.rotationYaw) < 315)){
 				if(this.modes.get(selectedMode).equals("3x3")){
 					threeByThreeForBack(world, player, x, y, z);
 				}
-			}else if((Math.abs(player.rotationYaw) >= 330 && Math.abs(player.rotationYaw) < 360) ||
+			}else if((Math.abs(player.rotationYaw) >= 315 && Math.abs(player.rotationYaw) < 360) ||
 					(Math.abs(player.rotationYaw) >= 0 && Math.abs(player.rotationYaw) < 30) ||
-					(Math.abs(player.rotationYaw) >= 150 && Math.abs(player.rotationYaw) < 210)){
+					(Math.abs(player.rotationYaw) >= 135 && Math.abs(player.rotationYaw) < 225)){
 				if(this.modes.get(selectedMode).equals("3x3")){
 					threeByThreeLeftRight(world, player, x, y, z);
 				}
@@ -56,6 +55,7 @@ public class Pickaxe extends EnergyUser{
 		}
 		return false;
 	}
+
 
 	public void threeByThreeUpDown(World world,EntityPlayer player, int x, int y, int z){
 		destroyBlock(world, player, x+1, y, z+1);

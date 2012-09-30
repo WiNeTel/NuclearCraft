@@ -1,6 +1,7 @@
 package zyngawow.nuclearcraft.blocks;
 
 import zyngawow.nuclearcraft.items.Battery;
+import zyngawow.nuclearcraft.items.EnergyProvider;
 import zyngawow.nuclearcraft.items.EnergyUser;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -30,14 +31,21 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 	public void updateEntity(){
 		for(int k=0;k<32;k++){
 			if(batteryStack[0] != null){
-				if(batteryStack[0].getItemDamage() < batteryStack[0].getMaxDamage() - 1F && this.storedEnergy < maxEnergy){
-					batteryStack[0].setItemDamage(batteryStack[0].getItemDamage() + 1);
-					storedEnergy+=0.97F;
+				if(EnergyProvider.class.isAssignableFrom(batteryStack[0].getItem().getClass())||
+						EnergyUser.class.isAssignableFrom(batteryStack[0].getItem().getClass())){
+					if(batteryStack[0].getItemDamage() < batteryStack[0].getMaxDamage() && this.storedEnergy < maxEnergy){
+						batteryStack[0].setItemDamage(batteryStack[0].getItemDamage() + 1);
+						storedEnergy+=0.97F;
+					}
 				}
-			}else if(batteryStack[1] != null){
-				if(batteryStack[1].getItemDamage() > 1.9999999F && this.storedEnergy > 0){
-					batteryStack[1].setItemDamage(batteryStack[1].getItemDamage() - 1);
-					storedEnergy-=1.03F;
+			}
+			if(batteryStack[1] != null){
+				if( (EnergyProvider.class.isAssignableFrom(batteryStack[1].getItem().getClass())||
+						EnergyUser.class.isAssignableFrom(batteryStack[1].getItem().getClass()) )){
+					if(batteryStack[1].getItemDamage() > 1.9999999F && this.storedEnergy > 0){
+						batteryStack[1].setItemDamage(batteryStack[1].getItemDamage() - 1);
+						storedEnergy-=1.03F;
+					}
 				}
 			}
 		}
@@ -50,7 +58,7 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 		}
 		return storedEnergy;
 	}
-	
+
 	@Override
 	public int getSizeInventory()
 	{
