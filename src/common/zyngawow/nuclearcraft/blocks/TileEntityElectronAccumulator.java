@@ -11,8 +11,14 @@ import net.minecraft.src.TileEntity;
 
 public class TileEntityElectronAccumulator extends TileEntity implements IInventory{
 	float output;
+	double storedEnergy;
 	int i=0;
-	ItemStack[] batteryStack = new ItemStack[getSizeInventory()];
+	int maxEnergy = 10000;
+	public ItemStack[] batteryStack = new ItemStack[2];
+	/**
+	 * batteryStack[0] for loading
+	 * batteryStack[1] for unloading
+	 */
 	private NBTTagList tagList;
 	private NBTTagList itemList;
 	int j = 0;
@@ -22,12 +28,33 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 	}
 	@Override
 	public void updateEntity(){
-		
+		for(int k=0;k<32;k++){
+			if(batteryStack[0] != null){
+				if(batteryStack[0].getItemDamage() < batteryStack[0].getMaxDamage() - 1F && this.storedEnergy < maxEnergy){
+					batteryStack[0].setItemDamage(batteryStack[0].getItemDamage() + 1);
+					storedEnergy+=0.97F;
+				}
+			}else if(batteryStack[1] != null){
+				if(batteryStack[1].getItemDamage() > 1.9999999F && this.storedEnergy > 0){
+					batteryStack[1].setItemDamage(batteryStack[1].getItemDamage() - 1);
+					storedEnergy-=1.03F;
+				}
+			}
+		}
 	}
+	protected double getEnergy(){
+		if(storedEnergy <= 0){
+			return 0;
+		}else if(storedEnergy >=maxEnergy){
+			return maxEnergy;
+		}
+		return storedEnergy;
+	}
+	
 	@Override
 	public int getSizeInventory()
 	{
-		return 2;
+		return batteryStack.length;
 	}
 
 	/**
@@ -110,7 +137,6 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 	 */
 	@Override
 	public void onInventoryChanged() {
-		System.out.println(this.batteryStack[0]);
 	}
 
 	/**
@@ -135,41 +161,43 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 	}
 
 	@Override
-	  public void readFromNBT(NBTTagCompound nbttagcompound)
-	  {
-	    super.readFromNBT(nbttagcompound);
-	    NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
-	    batteryStack = new ItemStack[getSizeInventory()];
-	    for (int i = 0; i < nbttaglist.tagCount(); i++)
-	    {
-	      NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
-	      int j = nbttagcompound1.getByte("Slot") & 0xff;
-	      if (j >= 0 && j < batteryStack.length+1)
-	      {
-	        batteryStack[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-	      }
-	    }
-	  }
+	public void readFromNBT(NBTTagCompound nbttagcompound)
+	{
+		super.readFromNBT(nbttagcompound);
+		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+		this.storedEnergy = nbttagcompound.getDouble("storedEnergy");
+		batteryStack = new ItemStack[getSizeInventory()];
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+			int j = nbttagcompound1.getByte("Slot") & 0xff;
+			if (j >= 0 && j < batteryStack.length+1)
+			{
+				batteryStack[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+			}
+		}
+	}
 
-	
-	 @Override
-	  public void writeToNBT(NBTTagCompound nbttagcompound)
-	  {
-	    super.writeToNBT(nbttagcompound);
-	    NBTTagList nbttaglist = new NBTTagList();
-	    for (int i = 0; i < batteryStack.length; i++)
-	    {
-	      if (batteryStack[i] != null)
-	      {
-	        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-	        nbttagcompound1.setByte("Slot", (byte) i);
-	        batteryStack[i].writeToNBT(nbttagcompound1);
-	        nbttaglist.appendTag(nbttagcompound1);
-	      }
-	    }
 
-	    nbttagcompound.setTag("Items", nbttaglist);
-	  }
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound)
+	{
+		super.writeToNBT(nbttagcompound);
+		nbttagcompound.setDouble("storedEnergy", storedEnergy);
+		NBTTagList nbttaglist = new NBTTagList();
+		for (int i = 0; i < batteryStack.length; i++)
+		{
+			if (batteryStack[i] != null)
+			{
+				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+				nbttagcompound1.setByte("Slot", (byte) i);
+				batteryStack[i].writeToNBT(nbttagcompound1);
+				nbttaglist.appendTag(nbttagcompound1);
+			}
+		}
 
-	
+		nbttagcompound.setTag("Items", nbttaglist);
+	}
+
+
 }

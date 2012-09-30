@@ -35,11 +35,13 @@ public class EnergyProvider extends ItemTool{
 		inventory = player.inventory;
 		for(int i=0;i<inventory.getSizeInventory();i++){
 			stack = inventory.getStackInSlot(i);
+			for(int j=0;j<32;j++){
 			if(stack != null){
-				if(EnergyUser.class.isAssignableFrom(stack.getItem().getClass()) && stack.getItemDamage() > 32 && par1ItemStack.getItemDamage() < par1ItemStack.getMaxDamage() - 32){
-					stack.setItemDamage(stack.getItemDamage() - 32);
-					par1ItemStack.damageItem(32, player);
+				if(EnergyUser.class.isAssignableFrom(stack.getItem().getClass()) && stack.getItemDamage() >= 1 && par1ItemStack.getItemDamage() < par1ItemStack.getMaxDamage()){
+					stack.setItemDamage(stack.getItemDamage() - 1);
+					par1ItemStack.damageItem(1, player);
 				}
+			}
 			}
 		}
 	}

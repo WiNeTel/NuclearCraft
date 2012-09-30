@@ -1,5 +1,8 @@
 package zyngawow.nuclearcraft.blocks;
 
+import zyngawow.nuclearcraft.items.Battery;
+import zyngawow.nuclearcraft.items.EnergyProvider;
+import zyngawow.nuclearcraft.items.EnergyUser;
 import net.minecraft.src.Block;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -16,16 +19,15 @@ public class ContainerElectronAccumulator extends Container{
 	private int posY;
 	private int posZ;
 	private World worldObj;
-	public IInventory[] batterySlots = new IInventory[2];
+	public IInventory batterySlots;
 	public ContainerElectronAccumulator(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5){
 		this.worldObj = par2World;
 		this.posX = par3;
 		this.posY = par4;
 		this.posZ = par5;
-		batterySlots[0] = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
-		this.addSlotToContainer(new Slot(this.batterySlots[0] , 0, 80, 57));
-		batterySlots[1] = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
-		this.addSlotToContainer(new Slot(this.batterySlots[1] , 1, 80, 57));
+		batterySlots = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
+		this.addSlotToContainer(new Slot(this.batterySlots , 0, 42, 20));
+		this.addSlotToContainer(new Slot(this.batterySlots , 1, 42, 51));
 		int var6;
 		int var7;
 
@@ -48,5 +50,70 @@ public class ContainerElectronAccumulator extends Container{
 	{
 		return true;
 	}
-	
+
+	@Override
+	public ItemStack transferStackInSlot(int par1)
+	{
+		ItemStack var2 = null;
+		Slot var3 = (Slot)this.inventorySlots.get(par1);
+
+		if (var3 != null && var3.getHasStack())
+		{
+			ItemStack var4 = var3.getStack();
+			var2 = var4.copy();
+
+			if (par1 != 0 && par1 != 1)
+			{
+				if (var4.getItem() instanceof EnergyProvider)
+				{
+					if (((EnergyProvider)var4.getItem()) != null){
+						if (!this.mergeItemStack(var4, 1, 2, false)){
+							return null;
+						}
+					}else{
+						if (!this.mergeItemStack(var4, 0, 1, false)){
+							return null;
+						}
+					}
+				}else if(var4.getItem() instanceof EnergyUser){
+					if(((EnergyUser)var4.getItem()) != null){
+						if(!mergeItemStack(var4, 1, 0, false)){
+							return null;
+						}
+					}
+					else{if(!mergeItemStack(var4, 0, 1, false)){
+							return null;
+						}
+					}
+				}
+				else if(par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
+				{
+					return null;
+				}
+			}
+			else if (!this.mergeItemStack(var4, 3, 38, false))
+			{
+				return null;
+			}
+
+			if (var4.stackSize == 0)
+			{
+				var3.putStack((ItemStack)null);
+			}
+			else
+			{
+				var3.onSlotChanged();
+			}
+
+			if (var4.stackSize == var2.stackSize)
+			{
+				return null;
+			}
+
+			var3.onPickupFromSlot(var4);
+		}
+
+		return var2;
+	}
+
 }

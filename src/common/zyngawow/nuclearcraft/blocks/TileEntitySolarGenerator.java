@@ -11,6 +11,7 @@ import net.minecraft.src.TileEntity;
 
 public class TileEntitySolarGenerator extends TileEntity implements IInventory{
 	float output;
+	double storedEnergy, maxEnergy;
 	int i=0;
 	ItemStack[] batteryStack = new ItemStack[1];
 	private NBTTagList tagList;
@@ -22,24 +23,27 @@ public class TileEntitySolarGenerator extends TileEntity implements IInventory{
 	}
 	@Override
 	public void updateEntity(){
+		maxEnergy = 1000;
 		int lightLevel =this.worldObj.getBlockLightValue(xCoord, yCoord+1, zCoord);
-		if(lightLevel == 15){
-			output = 0.15F;
-		}else if(lightLevel == 0){
-			output = 0;
-		}
-		else if(lightLevel < 6){
-			output = 0.01F;
-		}else if(lightLevel > 6){
-			output = lightLevel * 0.01F;
-		}
-		if(batteryStack[0] != null){
-			if((Battery.class.isAssignableFrom(batteryStack[0].getItem().getClass()) || EnergyUser.class.isAssignableFrom(batteryStack[0].getItem().getClass())) && batteryStack[0].getItemDamage() > 100){
-				if(j<6){
-					j++;
+		for(int k=0;k<32;k++){
+			if(batteryStack[0] != null){
+				if((Battery.class.isAssignableFrom(batteryStack[0].getItem().getClass()) || EnergyUser.class.isAssignableFrom(batteryStack[0].getItem().getClass())) && batteryStack[0].getItemDamage() >= 1){
+					if(storedEnergy > 1){
+						batteryStack[0].setItemDamage(batteryStack[0].getItemDamage() -1);
+						storedEnergy-=1;
+					}else{
+						if(storedEnergy < maxEnergy){
+							storedEnergy+= 0.15F/32;
+						}
+					}
 				}else{
-					batteryStack[0].setItemDamage(batteryStack[0].getItemDamage() -100);
-					j=0;
+					if(storedEnergy < maxEnergy){
+						storedEnergy+= 0.15F/32;
+					}
+				}
+			}else{
+				if(storedEnergy < maxEnergy){
+					storedEnergy+= 0.15F/32;
 				}
 			}
 		}
@@ -130,7 +134,6 @@ public class TileEntitySolarGenerator extends TileEntity implements IInventory{
 	 */
 	@Override
 	public void onInventoryChanged() {
-		System.out.println(this.batteryStack[0]);
 	}
 
 	/**
@@ -153,43 +156,49 @@ public class TileEntitySolarGenerator extends TileEntity implements IInventory{
 		// TODO Auto-generated method stub
 
 	}
+	
+	protected double getEnergy(){
+		return storedEnergy;
+	}
 
 	@Override
-	  public void readFromNBT(NBTTagCompound nbttagcompound)
-	  {
-	    super.readFromNBT(nbttagcompound);
-	    NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
-	    batteryStack = new ItemStack[getSizeInventory()];
-	    for (int i = 0; i < nbttaglist.tagCount(); i++)
-	    {
-	      NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
-	      int j = nbttagcompound1.getByte("Slot") & 0xff;
-	      if (j >= 0 && j < batteryStack.length)
-	      {
-	        batteryStack[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-	      }
-	    }
-	  }
+	public void readFromNBT(NBTTagCompound nbttagcompound)
+	{
+		super.readFromNBT(nbttagcompound);
+		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+		this.storedEnergy = nbttagcompound.getDouble("storedEnergy");
+		batteryStack = new ItemStack[getSizeInventory()];
+		for (int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+			int j = nbttagcompound1.getByte("Slot") & 0xff;
+			if (j >= 0 && j < batteryStack.length)
+			{
+				batteryStack[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+			}
+		}
+	}
 
-	
-	 @Override
-	  public void writeToNBT(NBTTagCompound nbttagcompound)
-	  {
-	    super.writeToNBT(nbttagcompound);
-	    NBTTagList nbttaglist = new NBTTagList();
-	    for (int i = 0; i < batteryStack.length; i++)
-	    {
-	      if (batteryStack[i] != null)
-	      {
-	        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-	        nbttagcompound1.setByte("Slot", (byte) i);
-	        batteryStack[i].writeToNBT(nbttagcompound1);
-	        nbttaglist.appendTag(nbttagcompound1);
-	      }
-	    }
 
-	    nbttagcompound.setTag("Items", nbttaglist);
-	  }
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound)
+	{
+		super.writeToNBT(nbttagcompound);
+		NBTTagList nbttaglist = new NBTTagList();
+		nbttagcompound.setDouble("storedEnergy", storedEnergy);
+		for (int i = 0; i < batteryStack.length; i++)
+		{
+			if (batteryStack[i] != null)
+			{
+				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+				nbttagcompound1.setByte("Slot", (byte) i);
+				batteryStack[i].writeToNBT(nbttagcompound1);
+				nbttaglist.appendTag(nbttagcompound1);
+			}
+		}
 
-	
+		nbttagcompound.setTag("Items", nbttaglist);
+	}
+
+
 }

@@ -29,26 +29,30 @@ public class Pickaxe extends EnergyUser{
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10){
 		this.is = is;
-		if(player.rotationPitch <= -27){
-			System.out.println("Facing up");
-			if(this.modes.get(selectedMode).equals("3x3")){
-				threeByThreeUpDown(world, player, x, y, z);
+		if(!player.isSneaking()){
+			if(player.rotationPitch <= -27){
+				System.out.println("Facing up");
+				if(this.modes.get(selectedMode).equals("3x3")){
+					threeByThreeUpDown(world, player, x, y, z);
+				}
+			}else if(player.rotationPitch >= 40){
+				if(this.modes.get(selectedMode).equals("3x3")){
+					threeByThreeUpDown(world, player, x, y, z);
+				}
+			}else if((Math.abs(player.rotationYaw) >= 60 && Math.abs(player.rotationYaw) < 120) || 
+					(Math.abs(player.rotationYaw) >= 240 && Math.abs(player.rotationYaw) < 300)){
+				if(this.modes.get(selectedMode).equals("3x3")){
+					threeByThreeForBack(world, player, x, y, z);
+				}
+			}else if((Math.abs(player.rotationYaw) >= 330 && Math.abs(player.rotationYaw) < 360) ||
+					(Math.abs(player.rotationYaw) >= 0 && Math.abs(player.rotationYaw) < 30) ||
+					(Math.abs(player.rotationYaw) >= 150 && Math.abs(player.rotationYaw) < 210)){
+				if(this.modes.get(selectedMode).equals("3x3")){
+					threeByThreeLeftRight(world, player, x, y, z);
+				}
 			}
-		}else if(player.rotationPitch >= 40){
-			if(this.modes.get(selectedMode).equals("3x3")){
-				threeByThreeUpDown(world, player, x, y, z);
-			}
-		}else if((Math.abs(player.rotationYaw) >= 60 && Math.abs(player.rotationYaw) < 120) || 
-				(Math.abs(player.rotationYaw) >= 240 && Math.abs(player.rotationYaw) < 300)){
-			if(this.modes.get(selectedMode).equals("3x3")){
-				threeByThreeForBack(world, player, x, y, z);
-			}
-		}else if((Math.abs(player.rotationYaw) >= 330 && Math.abs(player.rotationYaw) < 360) ||
-				(Math.abs(player.rotationYaw) >= 0 && Math.abs(player.rotationYaw) < 30) ||
-				(Math.abs(player.rotationYaw) >= 150 && Math.abs(player.rotationYaw) < 210)){
-			if(this.modes.get(selectedMode).equals("3x3")){
-				threeByThreeLeftRight(world, player, x, y, z);
-			}
+		}else{
+			destroyBlock(world, player, x, y, z);
 		}
 		return false;
 	}

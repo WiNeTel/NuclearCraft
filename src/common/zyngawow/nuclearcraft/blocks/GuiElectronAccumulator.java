@@ -1,5 +1,7 @@
 package zyngawow.nuclearcraft.blocks;
 
+import java.text.DecimalFormat;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.src.Container;
@@ -13,22 +15,32 @@ import cpw.mods.fml.common.asm.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiElectronAccumulator extends GuiContainer{
-
+	World world;
+	int x, y, z;
+	TileEntityElectronAccumulator teea;
 	public GuiElectronAccumulator(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5) {
-		super(new ContainerSolar(par1InventoryPlayer, par2World, par3, par4, par5));
+		super(new ContainerElectronAccumulator(par1InventoryPlayer, par2World, par3, par4, par5));
+		world = par2World;
+		x = par3;
+		y = par4;
+		z = par5;
+		teea = (TileEntityElectronAccumulator) world.getBlockTileEntity(x, y, z);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer()
 	{
-		this.fontRenderer.drawString("Generating Power", 50, 37, 4210752);
+		DecimalFormat df = new DecimalFormat( "#########0.00");
+		String formattedValue = df.format(teea.getEnergy());
+		this.fontRenderer.drawString("Electron Accumulator", 30, 7, 4210752);
+		this.fontRenderer.drawString(formattedValue + "/" + teea.maxEnergy, 60, 39, 4210752);
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2,
 			int var3) {
-		int var4 = this.mc.renderEngine.getTexture("/gui/GuiSolarGenerator.png");
+		int var4 = this.mc.renderEngine.getTexture("/gui/GuiEnergyStorage.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		int var5 = (this.width - this.xSize) / 2;

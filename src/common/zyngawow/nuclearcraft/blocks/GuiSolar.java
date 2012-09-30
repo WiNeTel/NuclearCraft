@@ -1,5 +1,7 @@
 package zyngawow.nuclearcraft.blocks;
 
+import java.text.DecimalFormat;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.src.Container;
@@ -13,16 +15,24 @@ import cpw.mods.fml.common.asm.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiSolar extends GuiContainer{
-
+	TileEntitySolarGenerator tesg;
+	World world;
+	int x, y, z;
 	public GuiSolar(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5) {
 		super(new ContainerSolar(par1InventoryPlayer, par2World, par3, par4, par5));
-		System.out.println("New gui");
+		x = par3;
+		y = par4;
+		z = par5;
+		world = par2World;
+		tesg = (TileEntitySolarGenerator) world.getBlockTileEntity(x, y, z);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer()
 	{
-		this.fontRenderer.drawString("Generating Power", 50, 37, 4210752);
+		DecimalFormat df = new DecimalFormat( "#########0.00");
+		String formattedValue = df.format(tesg.getEnergy());
+		this.fontRenderer.drawString("Stored " + formattedValue, 50, 37, 4210752);
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
