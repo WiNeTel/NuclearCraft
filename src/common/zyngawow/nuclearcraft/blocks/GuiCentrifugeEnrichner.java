@@ -40,7 +40,21 @@ public class GuiCentrifugeEnrichner extends GuiContainer{
 		this.mc.renderEngine.bindTexture(var4);
 		int var5 = (this.width - this.xSize) / 2;
 		int var6 = (this.height - this.ySize) / 2;
+		int var7 = (this.width - this.xSize) * 644 /1000;
+		int var8 = (this.height - this.ySize)* 719/1000;
 		this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);		
+		//this.drawTexturedModalRect(var5 + 36, var6 + 16, 0, 10, 56);
+		//this.drawTexturedModalRect(var5 + 36, var6 + 16, 0, 10, 56);
+		int energy;
+		//System.out.println(teea.getEnergy()/2000);
+		if(teea.getEnergy() == 0){
+			energy = 0;
+		}else if(teea.getEnergy() == teea.maxEnergy){
+			energy = 58;
+		}else{
+			energy = (int) (teea.getEnergy()*58)/teea.maxEnergy;
+		}
+		this.drawTexturedModalRect(var5 + 36, var6 + 16, 176, 0, 10, 58-energy);
 	}
 
 }

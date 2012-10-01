@@ -26,8 +26,8 @@ public class ContainerElectronAccumulator extends Container{
 		this.posY = par4;
 		this.posZ = par5;
 		batterySlots = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
-		this.addSlotToContainer(new Slot(this.batterySlots , 0, 42, 20));
-		this.addSlotToContainer(new Slot(this.batterySlots , 1, 42, 51));
+		this.addSlotToContainer(new Slot(this.batterySlots , 0, 69, 20));
+		this.addSlotToContainer(new Slot(this.batterySlots , 1, 69, 51));
 		int var6;
 		int var7;
 

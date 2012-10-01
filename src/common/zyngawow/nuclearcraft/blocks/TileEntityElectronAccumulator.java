@@ -42,7 +42,7 @@ public class TileEntityElectronAccumulator extends TileEntity implements IInvent
 			if(batteryStack[1] != null){
 				if( (EnergyProvider.class.isAssignableFrom(batteryStack[1].getItem().getClass())||
 						EnergyUser.class.isAssignableFrom(batteryStack[1].getItem().getClass()) )){
-					if(batteryStack[1].getItemDamage() > 1.9999999F && this.storedEnergy > 0){
+					if(batteryStack[1].getItemDamage() > 0 && this.storedEnergy > 0){
 						batteryStack[1].setItemDamage(batteryStack[1].getItemDamage() - 1);
 						storedEnergy-=1.03F;
 					}

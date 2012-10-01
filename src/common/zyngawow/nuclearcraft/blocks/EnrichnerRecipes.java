@@ -21,7 +21,8 @@ public class EnrichnerRecipes {
 		return enrichmentBase;
 	}
 	private EnrichnerRecipes(){
-		this.addEnrichment(Item.coal.shiftedIndex, new ItemStack(Item.ingotIron), 0.7F, 10);
+		this.addEnrichment(Item.coal.shiftedIndex, new ItemStack(Block.blockSteel), 0.7F, 10);
+		this.addEnrichment(Item.ingotIron.shiftedIndex, new ItemStack(Item.coal), 0.7F, 10);
 	}
 
 	public void addEnrichment(int par1, ItemStack par2ItemStack, float par3, int par4){

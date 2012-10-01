@@ -32,8 +32,8 @@ public class GuiElectronAccumulator extends GuiContainer{
 	{
 		DecimalFormat df = new DecimalFormat( "#########0.00");
 		String formattedValue = df.format(teea.getEnergy());
-		this.fontRenderer.drawString("Electron Accumulator", 30, 7, 4210752);
-		this.fontRenderer.drawString(formattedValue + "/" + teea.maxEnergy, 60, 39, 4210752);
+		this.fontRenderer.drawString("Electron Accumulator", 30, 4, 4210752);
+		this.fontRenderer.drawString(formattedValue + "/" + teea.maxEnergy, 8, 40, 4210752);
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
@@ -45,7 +45,16 @@ public class GuiElectronAccumulator extends GuiContainer{
 		this.mc.renderEngine.bindTexture(var4);
 		int var5 = (this.width - this.xSize) / 2;
 		int var6 = (this.height - this.ySize) / 2;
-		this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);		
+		this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
+		int energy;
+		if(teea.getEnergy() == 0){
+			energy = 0;
+		}else if(teea.getEnergy() == teea.maxEnergy){
+			energy = 58;
+		}else{
+			energy = (int) (teea.getEnergy()*58)/teea.maxEnergy;
+		}
+		this.drawTexturedModalRect(var5 + 107, var6 + 14, 176, 0, 10, 58-energy);
 	}
 
 }
