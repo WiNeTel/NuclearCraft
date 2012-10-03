@@ -1,8 +1,8 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
-import zyngawow.nuclearcraft.items.Battery;
-import zyngawow.nuclearcraft.items.EnergyProvider;
-import zyngawow.nuclearcraft.items.EnergyUser;
+import common.zyngawow.nuclearcraft.items.EnergyProvider;
+import common.zyngawow.nuclearcraft.items.EnergyUser;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -14,20 +14,19 @@ import net.minecraft.src.Slot;
 import net.minecraft.src.SlotCrafting;
 import net.minecraft.src.World;
 
-public class ContainerElectronAccumulator extends Container{
+public class ContainerSolar extends Container{
 	private int posX;
 	private int posY;
 	private int posZ;
 	private World worldObj;
-	public IInventory batterySlots;
-	public ContainerElectronAccumulator(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5){
+	public IInventory batterySlot;
+	public ContainerSolar(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5){
 		this.worldObj = par2World;
 		this.posX = par3;
 		this.posY = par4;
 		this.posZ = par5;
-		batterySlots = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
-		this.addSlotToContainer(new Slot(this.batterySlots , 0, 69, 20));
-		this.addSlotToContainer(new Slot(this.batterySlots , 1, 69, 51));
+		batterySlot = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
+		this.addSlotToContainer(new Slot(this.batterySlot , 0, 95, 23));
 		int var6;
 		int var7;
 
@@ -64,10 +63,10 @@ public class ContainerElectronAccumulator extends Container{
 
 			if (par1 != 0 && par1 != 1)
 			{
-				if (var4.getItem() instanceof EnergyProvider)
+				if (var4.getItem() instanceof EnergyProvider || var4.getItem() instanceof EnergyUser)
 				{
 					if (((EnergyProvider)var4.getItem()) != null){
-						if (!this.mergeItemStack(var4, 1, 2, false)){
+						if (!this.mergeItemStack(var4, 1, 0, false)){
 							return null;
 						}
 					}else{
@@ -82,8 +81,8 @@ public class ContainerElectronAccumulator extends Container{
 						}
 					}
 					else{if(!mergeItemStack(var4, 0, 1, false)){
-							return null;
-						}
+						return null;
+					}
 					}
 				}
 				else if(par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
@@ -115,5 +114,6 @@ public class ContainerElectronAccumulator extends Container{
 
 		return var2;
 	}
+	
 
 }

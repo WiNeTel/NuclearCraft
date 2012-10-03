@@ -1,57 +1,144 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
-import zyngawow.nuclearcraft.items.Battery;
-import zyngawow.nuclearcraft.items.EnergyUser;
+import common.zyngawow.nuclearcraft.items.EnergyProvider;
+import common.zyngawow.nuclearcraft.items.EnergyUser;
+
+import common.zyngawow.nuclearcraft.items.Battery;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 
-public class TileEntitySolarGenerator extends TileEntity implements IInventory{
+public class TileEntityCentrifugeEnrichner extends TileEntity implements IInventory{
 	float output;
-	double storedEnergy, maxEnergy;
+	double storedEnergy;
+	float enrichmentTime=0;
 	int i=0;
-	ItemStack[] batteryStack = new ItemStack[1];
+	int maxEnergy = 1000;
+	public ItemStack[] batteryStack = new ItemStack[8];
+	/**
+	 * batteryStack[0] for loading
+	 * batteryStack[1] for unloading
+	 */
 	private NBTTagList tagList;
 	private NBTTagList itemList;
 	int j = 0;
 	public NBTTagCompound stackTagCompound;
-	public TileEntitySolarGenerator()
+	public TileEntityCentrifugeEnrichner()
 	{
 	}
 	@Override
 	public void updateEntity(){
-		maxEnergy = 1000;
-		int lightLevel =this.worldObj.getBlockLightValue(xCoord, yCoord+1, zCoord);
 		for(int k=0;k<32;k++){
 			if(batteryStack[0] != null){
-				if((Battery.class.isAssignableFrom(batteryStack[0].getItem().getClass()) || EnergyUser.class.isAssignableFrom(batteryStack[0].getItem().getClass())) && batteryStack[0].getItemDamage() >= 1){
-					if(storedEnergy > 1){
-						batteryStack[0].setItemDamage(batteryStack[0].getItemDamage() -1);
-						storedEnergy-=1;
-					}else{
-						if(storedEnergy < maxEnergy){
-							storedEnergy+= 0.15F/32;
-						}
-					}
-				}else{
-					if(storedEnergy < maxEnergy){
-						storedEnergy+= 0.15F/32;
-					}
-				}
-			}else{
-				if(storedEnergy < maxEnergy){
-					storedEnergy+= 0.15F/32;
+				if((EnergyProvider.class.isAssignableFrom(batteryStack[0].getItem().getClass()) && batteryStack[0].getItemDamage() < batteryStack[0].getMaxDamage() && this.storedEnergy < maxEnergy)){
+					batteryStack[0].setItemDamage(batteryStack[0].getItemDamage() + 1);
+					storedEnergy+=0.97F;
 				}
 			}
 		}
+		if(enrichmentTime<0.05/(storedEnergy/2000)){
+			enrichmentTime+=0.05;
+		}else{
+			
+			if(batteryStack[1] != null){
+				if(storedEnergy > 10){
+					enrichItem(1);
+				}
+			}
+			if(batteryStack[2] != null){
+				if(storedEnergy > 10){
+					enrichItem(2);
+				}
+			}
+			if(batteryStack[3] != null){
+				if(storedEnergy > 10){
+					enrichItem(3);
+				}
+			}
+			if(batteryStack[4] != null){
+				if(storedEnergy > 10){
+					enrichItem(4);
+				}
+			}
+			if(batteryStack[5] != null){
+				if(storedEnergy > 10){
+					enrichItem(5);
+				}
+			}
+			if(batteryStack[6] != null){
+				if(storedEnergy > 10){
+					enrichItem(6);
+				}
+			}
+
+			enrichmentTime = 0;
+		}
+		
 	}
+
+	private void enrichItem(int i){
+		if(this.canEnrich(i)){
+			{
+				ItemStack var1 = EnrichnerRecipes.enrichment().getEnrichmentResult(this.batteryStack[i]);
+				if (this.batteryStack[7] == null)
+				{
+					System.out.println(var1.copy());
+					this.batteryStack[7] = var1.copy();
+					storedEnergy-=storedEnergy/20;
+				}
+				else if (this.batteryStack[7].isItemEqual(var1))
+				{
+					batteryStack[7].stackSize += var1.stackSize;
+					System.out.println(storedEnergy/2000);
+					storedEnergy-=storedEnergy/20;
+				}
+
+				--this.batteryStack[i].stackSize;
+
+				if (this.batteryStack[i].stackSize <= 0)
+				{
+
+					this.batteryStack[i] = null;
+				}
+
+			}
+		}
+	}
+
+	private boolean canEnrich(int x){
+		if (this.batteryStack[x] == null)
+		{
+
+			System.out.println(batteryStack[x] + " " + x);
+			return false;
+		}
+		else{
+			ItemStack var1 = EnrichnerRecipes.enrichment().getEnrichmentResult(this.batteryStack[x]);
+			if (var1 == null) return false;
+			if (this.batteryStack[7] == null) return true;
+			if (!this.batteryStack[7].isItemEqual(var1)) return false;
+			int result = batteryStack[7].stackSize + var1.stackSize;
+			return (result <= getInventoryStackLimit() && result <= var1.getMaxStackSize());
+		}
+	}
+
+	protected double getEnergy(){
+		if(storedEnergy <= 0){
+			return 0;
+		}else if(storedEnergy >=maxEnergy){
+			return maxEnergy;
+		}
+		return storedEnergy;
+	}
+
 	@Override
 	public int getSizeInventory()
 	{
-		return 1;
+		return batteryStack.length;
 	}
 
 	/**
@@ -156,10 +243,6 @@ public class TileEntitySolarGenerator extends TileEntity implements IInventory{
 		// TODO Auto-generated method stub
 
 	}
-	
-	protected double getEnergy(){
-		return storedEnergy;
-	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound)
@@ -172,7 +255,7 @@ public class TileEntitySolarGenerator extends TileEntity implements IInventory{
 		{
 			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
-			if (j >= 0 && j < batteryStack.length)
+			if (j >= 0 && j < batteryStack.length+1)
 			{
 				batteryStack[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
@@ -184,8 +267,8 @@ public class TileEntitySolarGenerator extends TileEntity implements IInventory{
 	public void writeToNBT(NBTTagCompound nbttagcompound)
 	{
 		super.writeToNBT(nbttagcompound);
-		NBTTagList nbttaglist = new NBTTagList();
 		nbttagcompound.setDouble("storedEnergy", storedEnergy);
+		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < batteryStack.length; i++)
 		{
 			if (batteryStack[i] != null)

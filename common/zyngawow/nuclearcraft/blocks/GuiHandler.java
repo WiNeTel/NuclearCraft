@@ -1,13 +1,18 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
-import zyngawow.nuclearcraft.core.NuclearCraft;
+import common.zyngawow.nuclearcraft.core.NuclearCraft;
+
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.World;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
+
+@SideOnly(Side.CLIENT)
 public class GuiHandler implements IGuiHandler{
 	Container container;
 	GuiContainer gui;

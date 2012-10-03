@@ -1,4 +1,4 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;

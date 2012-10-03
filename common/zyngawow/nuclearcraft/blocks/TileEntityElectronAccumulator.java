@@ -1,8 +1,9 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
-import zyngawow.nuclearcraft.items.Battery;
-import zyngawow.nuclearcraft.items.EnergyProvider;
-import zyngawow.nuclearcraft.items.EnergyUser;
+import common.zyngawow.nuclearcraft.items.EnergyProvider;
+import common.zyngawow.nuclearcraft.items.EnergyUser;
+
+import common.zyngawow.nuclearcraft.items.Battery;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;

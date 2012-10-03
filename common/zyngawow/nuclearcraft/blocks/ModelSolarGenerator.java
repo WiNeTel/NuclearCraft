@@ -1,4 +1,4 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
 import net.minecraft.src.Entity;
 import net.minecraft.src.ModelBase;

@@ -1,8 +1,9 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
 import java.util.Random;
 
-import zyngawow.nuclearcraft.core.NuclearCraft;
+import common.zyngawow.nuclearcraft.core.NuclearCraft;
+
 
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;

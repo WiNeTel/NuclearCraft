@@ -1,20 +1,22 @@
-package zyngawow.nuclearcraft.core;
+package common.zyngawow.nuclearcraft.core;
 
-import zyngawow.nuclearcraft.blocks.CentrifugeEnrichner;
-import zyngawow.nuclearcraft.blocks.ElectronAccumulator;
-import zyngawow.nuclearcraft.blocks.GuiHandler;
-import zyngawow.nuclearcraft.blocks.SolarGenerator;
-import zyngawow.nuclearcraft.blocks.TileEntityCentrifugeEnrichner;
-import zyngawow.nuclearcraft.blocks.TileEntityElectronAccumulator;
-import zyngawow.nuclearcraft.blocks.TileEntitySolarGenerator;
-import zyngawow.nuclearcraft.items.Battery;
-import zyngawow.nuclearcraft.items.Pickaxe;
+import common.zyngawow.nuclearcraft.blocks.CentrifugeEnrichner;
+import common.zyngawow.nuclearcraft.blocks.ElectronAccumulator;
+import common.zyngawow.nuclearcraft.blocks.GuiHandler;
+import common.zyngawow.nuclearcraft.blocks.SolarGenerator;
+import common.zyngawow.nuclearcraft.blocks.TileEntityCentrifugeEnrichner;
+import common.zyngawow.nuclearcraft.blocks.TileEntityElectronAccumulator;
+import common.zyngawow.nuclearcraft.blocks.TileEntitySolarGenerator;
+import common.zyngawow.nuclearcraft.items.Pickaxe;
+import common.zyngawow.nuclearcraft.items.Battery;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.*;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
@@ -24,10 +26,8 @@ import net.minecraftforge.common.*;
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
 public class NuclearCraft{
-	@SidedProxy(clientSide = "nuclearcraft.client.ClientProxyNuclearCraft", serverSide = "core.nuclearcraft.common.CommonProxyNuclearCraft")
+	@SidedProxy(clientSide = "nuclearcraft.client.ClientProxyNuclearCraft", serverSide = "common.zyngawow.nuclearcraft.core.CommonProxyNuclearCraft")
 	public static CommonProxyNuclearCraft proxy;
-
-	public GuiHandler guiHandler;
 	
 	public static Block solarGenerator, electronAccumulator, centrifugeEnrichner;
 	public static Item graphitePickaxe, battery;
@@ -73,9 +73,13 @@ public class NuclearCraft{
 		centrifugeEnrichner = new CentrifugeEnrichner(centrifugeEnrichnerId, Material.rock)
 		.setBlockName("Centrifuge Enrichner")
 		.setCreativeTab(CreativeTabs.tabTools);
+
+		System.out.println("Test");
 		
-		guiHandler = new GuiHandler();
-		NetworkRegistry.instance().registerGuiHandler(instance, guiHandler);
+		Minecraft mc = Minecraft.getMinecraft(); if(mc.theWorld.isRemote){
+			GuiHandler guiHandler = new GuiHandler();
+			guiHandler.registerRenderers();
+		}
 		
 		GameRegistry.registerBlock(solarGenerator);
 		GameRegistry.registerBlock(electronAccumulator);
@@ -88,7 +92,6 @@ public class NuclearCraft{
 		LanguageRegistry.addName(battery, "Battery");
 		LanguageRegistry.addName(electronAccumulator, "Electron Accumulator");
 		LanguageRegistry.addName(centrifugeEnrichner, "Centrifuge Enrichner");
-		
 		
 		proxy.registerRenderThings();
 	}

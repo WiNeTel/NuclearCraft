@@ -1,8 +1,8 @@
-package zyngawow.nuclearcraft.blocks;
+package common.zyngawow.nuclearcraft.blocks;
 
-import zyngawow.nuclearcraft.items.Battery;
-import zyngawow.nuclearcraft.items.EnergyProvider;
-import zyngawow.nuclearcraft.items.EnergyUser;
+import common.zyngawow.nuclearcraft.items.EnergyProvider;
+import common.zyngawow.nuclearcraft.items.EnergyUser;
+import common.zyngawow.nuclearcraft.items.Battery;
 import net.minecraft.src.Block;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -14,26 +14,20 @@ import net.minecraft.src.Slot;
 import net.minecraft.src.SlotCrafting;
 import net.minecraft.src.World;
 
-public class ContainerCentrifugeEnrichner extends Container{
+public class ContainerElectronAccumulator extends Container{
 	private int posX;
 	private int posY;
 	private int posZ;
 	private World worldObj;
 	public IInventory batterySlots;
-	public ContainerCentrifugeEnrichner(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5){
+	public ContainerElectronAccumulator(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5){
 		this.worldObj = par2World;
 		this.posX = par3;
 		this.posY = par4;
 		this.posZ = par5;
 		batterySlots = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
-		this.addSlotToContainer(new Slot(this.batterySlots , 0, 13, 36));
-		this.addSlotToContainer(new Slot(this.batterySlots , 1, 63, 16));
-		this.addSlotToContainer(new Slot(this.batterySlots , 2, 63, 37));
-		this.addSlotToContainer(new Slot(this.batterySlots , 3, 63, 58));
-		this.addSlotToContainer(new Slot(this.batterySlots , 4, 84, 16));
-		this.addSlotToContainer(new Slot(this.batterySlots , 5, 84, 37));
-		this.addSlotToContainer(new Slot(this.batterySlots , 6, 84, 58));
-		this.addSlotToContainer(new Slot(this.batterySlots , 7, 132, 37));
+		this.addSlotToContainer(new Slot(this.batterySlots , 0, 69, 20));
+		this.addSlotToContainer(new Slot(this.batterySlots , 1, 69, 51));
 		int var6;
 		int var7;
 
@@ -88,8 +82,8 @@ public class ContainerCentrifugeEnrichner extends Container{
 						}
 					}
 					else{if(!mergeItemStack(var4, 0, 1, false)){
-							return null;
-						}
+						return null;
+					}
 					}
 				}
 				else if(par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))

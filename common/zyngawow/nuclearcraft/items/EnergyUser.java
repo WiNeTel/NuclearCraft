@@ -1,4 +1,4 @@
-package zyngawow.nuclearcraft.items;
+package common.zyngawow.nuclearcraft.items;
 
 import java.util.List;
 
