@@ -47,7 +47,6 @@ public class GuiSolar extends GuiContainer{
 	int var6 = (this.height - this.ySize) / 2;
 	this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
 	if(tesg.providesEnery()){
-	    System.out.println("Providing energy");
 	    this.drawTexturedModalRect(var5 + 64, var6 + 20, 176, 0, 22, 22);
 	}
     }

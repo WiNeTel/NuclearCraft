@@ -28,13 +28,13 @@ public class ContainerCentrifugeEnrichner extends Container{
 		this.posZ = par5;
 		batterySlots = (IInventory) par2World.getBlockTileEntity(par3, par4, par5);
 		this.addSlotToContainer(new Slot(this.batterySlots , 0, 13, 36));
-		this.addSlotToContainer(new Slot(this.batterySlots , 1, 63, 16));
-		this.addSlotToContainer(new Slot(this.batterySlots , 2, 63, 37));
-		this.addSlotToContainer(new Slot(this.batterySlots , 3, 63, 58));
-		this.addSlotToContainer(new Slot(this.batterySlots , 4, 84, 16));
-		this.addSlotToContainer(new Slot(this.batterySlots , 5, 84, 37));
-		this.addSlotToContainer(new Slot(this.batterySlots , 6, 84, 58));
-		this.addSlotToContainer(new Slot(this.batterySlots , 7, 132, 37));
+		this.addSlotToContainer(new Slot(this.batterySlots , 1, 64, 16));
+		this.addSlotToContainer(new Slot(this.batterySlots , 2, 64, 37));
+		this.addSlotToContainer(new Slot(this.batterySlots , 3, 64, 58));
+		this.addSlotToContainer(new Slot(this.batterySlots , 4, 85, 16));
+		this.addSlotToContainer(new Slot(this.batterySlots , 5, 85, 37));
+		this.addSlotToContainer(new Slot(this.batterySlots , 6, 85, 58));
+		this.addSlotToContainer(new Slot(this.batterySlots , 7, 143, 37));
 		int var6;
 		int var7;
 

@@ -11,45 +11,40 @@ import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-
-@SideOnly(Side.CLIENT)
 public class GuiHandler implements IGuiHandler{
-	Container container;
-	GuiContainer gui;
-	public void registerRenderers() {
-		NetworkRegistry.instance().registerGuiHandler(NuclearCraft.instance, new GuiHandler());
+    public void registerRenderers() {
+	NetworkRegistry.instance().registerGuiHandler(NuclearCraft.instance, new GuiHandler());
+    }
+    @Override
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world,
+	    int x, int y, int z) {
+	System.out.println(ID);
+	switch(ID){
+	case 0:
+	    return new ContainerSolar(player.inventory, world, x, y, z);
+	case 1:
+	    return new ContainerElectronAccumulator(player.inventory, world, x, y, z);
+	case 2:
+	    System.out.println("2");
+	    return new ContainerCentrifugeEnrichner(player.inventory, world, x, y, z);
 	}
-	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
-		switch(ID){
-		case 0:
-			container = new ContainerSolar(player.inventory, world, x, y, z);
-			break;
-		case 1:
-			container = new ContainerElectronAccumulator(player.inventory, world, x, y, z);
-			break;
-		case 2:
-			container = new ContainerCentrifugeEnrichner(player.inventory, world, x, y, z);
-		}
-		return container;
+	return null;
+    }
+    @Override
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world,
+	    int x, int y, int z) {
+
+	System.out.println(ID);
+	switch(ID){
+	case 0:
+	    return new GuiSolar(player.inventory, world, x, y, z);
+	case 1:
+	    return new GuiElectronAccumulator(player.inventory, world, x, y, z);
+	case 2:
+	    return new GuiCentrifugeEnrichner(player.inventory, world, x, y, z);
 	}
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
-		switch(ID){
-		case 0:
-			gui = new GuiSolar(player.inventory, world, x, y, z);
-			break;
-		case 1:
-			gui = new GuiElectronAccumulator(player.inventory, world, x, y, z);
-			break;
-		case 2:
-			gui = new GuiCentrifugeEnrichner(player.inventory, world, x, y, z);
-			break;
-		}
-		return gui;
-	}
+	return null;
+    }
 
 
 }

@@ -198,10 +198,10 @@ public class TileEntitySolarGenerator extends TileEntity implements IInventory{
     }
 
 
+    @SuppressWarnings("unused")
     boolean providesEnery(){
 	for(int y=yCoord+1;y<worldObj.getActualHeight();y++){
 	    if(worldObj.getBlockId(xCoord, y, zCoord) == 0){
-		System.out.println(worldObj.isDaytime());
 		if(worldObj.isDaytime()){
 		    return true;
 		}else{

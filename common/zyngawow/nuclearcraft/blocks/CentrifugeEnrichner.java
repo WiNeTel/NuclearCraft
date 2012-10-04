@@ -5,6 +5,7 @@ import java.util.Random;
 import common.zyngawow.nuclearcraft.core.NuclearCraft;
 
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -27,42 +28,41 @@ import net.minecraft.src.World;
 
 public class CentrifugeEnrichner extends BlockContainer{
 
-	public CentrifugeEnrichner(int par1, Material par2Material) {
-		super(par1, par2Material);
-		// TODO Auto-generated constructor stub
+    public CentrifugeEnrichner(int par1, Material par2Material) {
+	super(par1, par2Material);
+	// TODO Auto-generated constructor stub
+    }
+    @Override
+    public TileEntity createNewTileEntity(World par1World)
+    {
+	return new TileEntityCentrifugeEnrichner();
+    }
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
+    {
+	if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+	    player.openGui(NuclearCraft.instance, 2, world, x, y, z);
+	    return true;
 	}
-	@Override
-	public TileEntity createNewTileEntity(World par1World)
-	{
-		return new TileEntityCentrifugeEnrichner();
+	return false;
+    }
+    @Override
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    {
+	TileEntityCentrifugeEnrichner teec = (TileEntityCentrifugeEnrichner) par1World.getBlockTileEntity(par2, par3, par4);
+	if(teec != null){
+	    if(teec.getStackInSlot(0) != null){
+		par1World.spawnEntityInWorld(new EntityItem(par1World, par2, par3, par4, teec.getStackInSlot(0)));
+	    }
+	    if(teec.getStackInSlot(1) != null){
+		par1World.spawnEntityInWorld(new EntityItem(par1World, par2, par3, par4, teec.getStackInSlot(1)));
+	    }
 	}
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
-	{
-		if(world.isRemote){
-			return true;
-		}else{
-			player.openGui(NuclearCraft.instance, 2, world, x, y, z);
-			return true;
-		}
-	}
-	@Override
-	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
-	{
-		TileEntityCentrifugeEnrichner teec = (TileEntityCentrifugeEnrichner) par1World.getBlockTileEntity(par2, par3, par4);
-		if(teec != null){
-			if(teec.getStackInSlot(0) != null){
-				par1World.spawnEntityInWorld(new EntityItem(par1World, par2, par3, par4, teec.getStackInSlot(0)));
-			}
-			if(teec.getStackInSlot(1) != null){
-				par1World.spawnEntityInWorld(new EntityItem(par1World, par2, par3, par4, teec.getStackInSlot(1)));
-			}
-		}
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
-		par1World.removeBlockTileEntity(par2, par3, par4);
-	}
-	@Override
-	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
-	{
-	}
+	super.breakBlock(par1World, par2, par3, par4, par5, par6);
+	par1World.removeBlockTileEntity(par2, par3, par4);
+    }
+    @Override
+    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
+    {
+    }
 }

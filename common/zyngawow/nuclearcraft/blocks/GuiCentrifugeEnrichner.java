@@ -28,20 +28,21 @@ public class GuiCentrifugeEnrichner extends GuiContainer{
 	{
 		DecimalFormat df = new DecimalFormat( "#########0.00");
 		String formattedValue = df.format(teea.getEnergy());
-		this.fontRenderer.drawString("Centrifuge Enrichner", 30, 5, 4210752);
+		DecimalFormat df1 = new DecimalFormat( "#########0.00");
+		String formattedValue1 = df.format(teea.getChance()*100);
+		this.fontRenderer.drawString("Centrifuge Enrichner", 37, 5, 4210752);
+		this.fontRenderer.drawString("Chance:" + formattedValue1 + "%", 103, 24, 4210752);
 		//this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2,
 			int var3) {
-		int var4 = this.mc.renderEngine.getTexture("/zyngawow/nuclearcraft/gui/centrifugeEnrichner.png");
+		int var4 = this.mc.renderEngine.getTexture("/gui/centrifugeEnrichner.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		int var5 = (this.width - this.xSize) / 2;
 		int var6 = (this.height - this.ySize) / 2;
-		int var7 = (this.width - this.xSize) * 644 /1000;
-		int var8 = (this.height - this.ySize)* 719/1000;
 		this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);		
 		//this.drawTexturedModalRect(var5 + 36, var6 + 16, 0, 10, 56);
 		//this.drawTexturedModalRect(var5 + 36, var6 + 16, 0, 10, 56);
@@ -50,11 +51,11 @@ public class GuiCentrifugeEnrichner extends GuiContainer{
 		if(teea.getEnergy() == 0){
 			energy = 0;
 		}else if(teea.getEnergy() == teea.maxEnergy){
-			energy = 58;
+			energy = 53;
 		}else{
-			energy = (int) (teea.getEnergy()*58)/teea.maxEnergy;
+			energy = (int) (teea.getEnergy()*53)/teea.maxEnergy;
 		}
-		this.drawTexturedModalRect(var5 + 36, var6 + 16, 176, 0, 10, 58-energy);
+		this.drawTexturedModalRect(var5 + 40, var6 + 19, 176, 0, 10, 53-energy);
 	}
 
 }
