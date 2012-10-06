@@ -33,20 +33,21 @@ public class CommonProxy implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if(ID == GuiIds.SOLAR_GENERATOR){
-			TileSolarGenerator solarGenerator = (TileSolarGenerator) world.getBlockTileEntity(x, y, z);
+		if (ID == GuiIds.SOLAR_GENERATOR) {
+			TileSolarGenerator solarGenerator = (TileSolarGenerator)world.getBlockTileEntity(x, y, z);
 			return new ContainerSolarGenerator(player.inventory, solarGenerator);
 		}
+
 		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if(ID == GuiIds.SOLAR_GENERATOR){
-			TileSolarGenerator solarGenerator = (TileSolarGenerator) world.getBlockTileEntity(x, y, z);
+		if (ID == GuiIds.SOLAR_GENERATOR) {
+			TileSolarGenerator solarGenerator = (TileSolarGenerator)world.getBlockTileEntity(x, y, z);
 			return new GuiSolarGenerator(player.inventory, solarGenerator);
 		}
+
 		return null;
 	}
-
 }

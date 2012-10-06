@@ -23,7 +23,6 @@ public class GuiSolarGenerator extends GuiContainer {
 	
 	 public GuiSolarGenerator(InventoryPlayer player, TileSolarGenerator solarGenerator) {
 	        super(new ContainerSolarGenerator(player, solarGenerator));
-	        this.ySize = 176;
 	        this.solarGenerator = solarGenerator;
 	    }
 

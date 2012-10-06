@@ -20,21 +20,21 @@ public class ContainerSolarGenerator extends Container {
 		// Add the solarGenerator battery slot to the container
 		this.addSlotToContainer(new Slot(solarGenerator, 0, 56, 17));
 
-		// Add the player's inventory slots to the container
-		for (int inventoryRowIndex = 0; inventoryRowIndex < 3; ++inventoryRowIndex)
-		{
-			for (int inventoryColumnIndex = 0; inventoryColumnIndex < 9; ++inventoryColumnIndex)
-			{
-				this.addSlotToContainer(new Slot(inventoryPlayer, inventoryColumnIndex + inventoryRowIndex * 9 + 9, 8 + inventoryColumnIndex * 18, 94 + inventoryRowIndex * 18));
-			}
-		}
-
-		// Add the player's action bar slots to the container
-		for (int actionBarSlotIndex = 0; actionBarSlotIndex < 9; ++actionBarSlotIndex)
-		{
-			this.addSlotToContainer(new Slot(inventoryPlayer, actionBarSlotIndex, 8 + actionBarSlotIndex * 18, 152));
-		}
+		bindPlayerInventory(inventoryPlayer);
 	}
+		
+	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
+        for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 9; j++) {
+                        addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
+                                        8 + j * 18, 84 + i * 18));
+                }
+        }
+
+        for (int i = 0; i < 9; i++) {
+                addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+        }
+}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer var1) {
