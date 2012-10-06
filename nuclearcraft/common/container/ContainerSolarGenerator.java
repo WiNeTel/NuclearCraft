@@ -18,7 +18,7 @@ public class ContainerSolarGenerator extends Container {
 		this.solarGenerator = solarGenerator;
 
 		// Add the solarGenerator battery slot to the container
-		this.addSlotToContainer(new Slot(solarGenerator, 0, 56, 17));
+		this.addSlotToContainer(new Slot(solarGenerator, 0, 95, 23));
 
 		bindPlayerInventory(inventoryPlayer);
 	}
@@ -38,80 +38,39 @@ public class ContainerSolarGenerator extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer var1) {
-		return false;
+		return true;
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(int par1)
+	public ItemStack transferStackInSlot(int slot)
 	{
-		ItemStack var2 = null;
-		Slot var3 = (Slot)this.inventorySlots.get(par1);
+		ItemStack stack = null;
+        Slot slotObject = (Slot) inventorySlots.get(slot);
 
-		if (var3 != null && var3.getHasStack())
-		{
-			ItemStack var4 = var3.getStack();
-			var2 = var4.copy();
+        //null checks and checks if the item can be stacked (maxStackSize > 1)
+        if (slotObject != null && slotObject.getHasStack()) {
+                ItemStack stackInSlot = slotObject.getStack();
+                stack = stackInSlot.copy();
 
-			if (par1 == 2)
-			{
-				if (!this.mergeItemStack(var4, 3, 39, true))
-				{
-					return null;
-				}
+                //merges the item into player inventory since its in the tileEntity
+                if (slot == 0) {
+                        if (!mergeItemStack(stackInSlot, 1,
+                                        inventorySlots.size(), true)) {
+                                return null;
+                        }
+                //places it into the tileEntity is possible since its in the player inventory
+                } else if (!mergeItemStack(stackInSlot, 0, 1, false)) {
+                        return null;
+                }
 
-				var3.onSlotChange(var4, var2);
-			}
-			else if (par1 != 1 && par1 != 0)
-			{
-				if (FurnaceRecipes.smelting().getSmeltingResult(var4) != null)
-				{
-					if (!this.mergeItemStack(var4, 0, 1, false))
-					{
-						return null;
-					}
-				}
-				else if (TileEntityFurnace.isItemFuel(var4))
-				{
-					if (!this.mergeItemStack(var4, 1, 2, false))
-					{
-						return null;
-					}
-				}
-				else if (par1 >= 3 && par1 < 30)
-				{
-					if (!this.mergeItemStack(var4, 30, 39, false))
-					{
-						return null;
-					}
-				}
-				else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
-				{
-					return null;
-				}
-			}
-			else if (!this.mergeItemStack(var4, 3, 39, false))
-			{
-				return null;
-			}
+                if (stackInSlot.stackSize == 0) {
+                        slotObject.putStack(null);
+                } else {
+                        slotObject.onSlotChanged();
+                }
+        }
 
-			if (var4.stackSize == 0)
-			{
-				var3.putStack((ItemStack)null);
-			}
-			else
-			{
-				var3.onSlotChanged();
-			}
-
-			if (var4.stackSize == var2.stackSize)
-			{
-				return null;
-			}
-
-			var3.onPickupFromSlot(var4);
-		}
-
-		return var2;
+        return stack;
 	}
 
 

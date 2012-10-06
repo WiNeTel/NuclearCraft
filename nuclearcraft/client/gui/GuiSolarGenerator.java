@@ -32,7 +32,9 @@ public class GuiSolarGenerator extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer()
 	{
-		LogHelper.log(Level.SEVERE, "Panting GUI Foreground");
+		if(solarGenerator.solarGeneratorItemStacks[0] != null){
+			System.out.println(solarGenerator.solarGeneratorItemStacks[0]);
+		}
 		this.fontRenderer.drawString("Solar Generator", 60, 6, 4210752);
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
@@ -40,8 +42,6 @@ public class GuiSolarGenerator extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2,
 			int var3) {
-
-		LogHelper.log(Level.SEVERE, "Panting GUI Background");
 		int var4 = this.mc.renderEngine.getTexture(Reference.GUI_SHEET_LOCATION + "solarGenerator.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);

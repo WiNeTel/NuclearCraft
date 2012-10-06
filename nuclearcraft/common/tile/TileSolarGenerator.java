@@ -1,17 +1,32 @@
 package nuclearcraft.common.tile;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+
+import com.google.common.io.ByteArrayDataInput;
+
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet;
+import net.minecraft.src.Packet250CustomPayload;
 import nuclearcraft.common.block.ModBlocks;
+import nuclearcraft.common.core.handlers.PacketHandler;
+import nuclearcraft.common.core.helper.LogHelper;
+import nuclearcraft.common.lib.Reference;
 
 public class TileSolarGenerator extends TileNC implements IInventory{
-	private ItemStack[] solarGeneratorItemStacks = new ItemStack[1];
-
+	public ItemStack[] solarGeneratorItemStacks = new ItemStack[1];
+	public double storedEnergy;
+	public int facing;
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
-
+		this.storedEnergy = nbtTagCompound.getDouble("electricityStored");
 		// Read in the ItemStacks in the inventory from NBT
 		NBTTagList tagList = nbtTagCompound.getTagList("Items");
 		this.solarGeneratorItemStacks = new ItemStack[this.getSizeInventory()];
@@ -27,7 +42,7 @@ public class TileSolarGenerator extends TileNC implements IInventory{
 
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-
+		nbtTagCompound.setDouble("electricityStored", this.storedEnergy);
 		// Write the ItemStacks in the inventory to NBT
 		NBTTagList tagList = new NBTTagList();
 		for (int currentIndex = 0; currentIndex < this.solarGeneratorItemStacks.length; ++currentIndex) {
@@ -39,6 +54,57 @@ public class TileSolarGenerator extends TileNC implements IInventory{
 			}
 		}
 		nbtTagCompound.setTag("Items", tagList);
+
+	}
+	
+	public Packet getDescriptionPacket()
+	{
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream output = new DataOutputStream(bytes);
+        
+        try {
+        	output.writeInt(1);
+        	output.writeInt(xCoord);
+        	output.writeInt(yCoord);
+        	output.writeInt(zCoord);
+        	output.writeInt(facing);
+        	output.writeDouble(storedEnergy);
+        } catch (IOException e)
+        {
+        	LogHelper.log(Level.SEVERE, "Unable to send stored electricity packet");
+        	e.printStackTrace();
+        }
+        
+        Packet250CustomPayload packet = new Packet250CustomPayload();
+        packet.channel = Reference.CHANNEL_NAME;
+        packet.data = bytes.toByteArray();
+        packet.length = packet.data.length;
+        
+        return packet;
+	}
+	
+	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	{
+		try {
+			facing = dataStream.readInt();
+			storedEnergy = dataStream.readDouble();
+			worldObj.markBlockAsNeedsUpdate(xCoord, yCoord, zCoord);
+		} catch (Exception e)
+		{
+			LogHelper.log(Level.SEVERE, "Error handling electricity packet");
+			e.printStackTrace();
+		}
+	}
+
+
+	public void updateEntity() {
+		if(this.storedEnergy<1000){
+			this.storedEnergy++;
+		}
+		if(!worldObj.isRemote){
+			PacketHandler.sendStoredElectricityPacket(this);
+		}
+		System.out.println(storedEnergy);
 
 	}
 
@@ -56,18 +122,35 @@ public class TileSolarGenerator extends TileNC implements IInventory{
 		return this.solarGeneratorItemStacks[i];
 	}
 
-	public ItemStack decrStackSize(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
+	public ItemStack decrStackSize(int slot, int amt) {
+		ItemStack stack = getStackInSlot(slot);
+		if (stack != null) {
+			if (stack.stackSize <= amt) {
+				setInventorySlotContents(slot, null);
+			} else {
+				stack = stack.splitStack(amt);
+				if (stack.stackSize == 0) {
+					setInventorySlotContents(slot, null);
+				}
+			}
+		}
+		return stack;
 	}
 
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return null;
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		ItemStack stack = getStackInSlot(slot);
+		if (stack != null) {
+			setInventorySlotContents(slot, null);
+		}
+		return stack;
 	}
 
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2) {
-		// TODO Auto-generated method stub
+		solarGeneratorItemStacks[var1] = var2;
+		if (var2 != null && var2.stackSize > getInventoryStackLimit()) {
+			var2.stackSize = getInventoryStackLimit();
+		}     
 
 	}
 
@@ -79,7 +162,8 @@ public class TileSolarGenerator extends TileNC implements IInventory{
 		return 64;
 	}
 
-	public void openChest() { }
+	public void openChest() { 
+	}
 	public void closeChest() { }
 
 }
