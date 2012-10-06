@@ -36,7 +36,7 @@ public class GuiSolarGenerator extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2,
 			int var3) {
-		int var4 = this.mc.renderEngine.getTexture(Reference.GUI_SHEET_LOCATION + "calcinator.png");
+		int var4 = this.mc.renderEngine.getTexture(Reference.GUI_SHEET_LOCATION + "solarGenerator.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		int var5 = (this.width - this.xSize) / 2;

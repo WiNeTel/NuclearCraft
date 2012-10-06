@@ -28,7 +28,7 @@ public class CommonProxy implements IGuiHandler {
 	public void initRenderingAndTextures() {}
 
 	public void initTileEntities() {
-		// TODO: Constant
+		GameRegistry.registerTileEntity(TileSolarGenerator.class, "tileSolarGenerator");
 	}
 
 	@Override

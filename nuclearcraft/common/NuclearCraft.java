@@ -35,7 +35,7 @@ public class NuclearCraft {
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
-
+		instance = this;
 		// Load the localization files into the LanguageRegistry
 		LocalizationHandler.loadLanguages();
 
