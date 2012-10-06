@@ -28,7 +28,7 @@ import nuclearcraft.common.lib.*;
 public class NuclearCraft {
 
 	@Instance("NuclearCraft")
-	public static NuclearCraft instance;
+	public static NuclearCraft instance = new NuclearCraft();
 
 	@SidedProxy(clientSide = "nuclearcraft.client.core.ClientProxy", serverSide = "nuclearcraft.common.core.CommonProxy")
 	public static CommonProxy proxy;

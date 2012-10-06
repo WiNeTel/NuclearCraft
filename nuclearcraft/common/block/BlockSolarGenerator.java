@@ -1,12 +1,16 @@
 package nuclearcraft.common.block;
 
+import java.util.logging.Level;
+
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import nuclearcraft.common.NuclearCraft;
+import nuclearcraft.common.core.helper.LogHelper;
 import nuclearcraft.common.lib.GuiIds;
+import nuclearcraft.common.lib.Reference;
 import nuclearcraft.common.lib.RenderIds;
 import nuclearcraft.common.tile.TileSolarGenerator;
 
@@ -45,19 +49,21 @@ public class BlockSolarGenerator extends BlockNC {
 	}
 
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		
+
 		TileSolarGenerator tileSolarGenerator = (TileSolarGenerator) world.getBlockTileEntity(x, y, z);
-		/**
+
 		if (tileSolarGenerator == null) {
+			LogHelper.log(Level.SEVERE, "The tile entity is null");
 			return true;
 		}
 		if (world.isRemote) {
+			LogHelper.log(Level.SEVERE, "The world is remote");
 			return true;
 		}
-		**/
-		player.openGui(NuclearCraft.instance, GuiIds.SOLAR_GENERATOR, world, x, y, z);
-		return true;
+			player.openGui(NuclearCraft.instance, GuiIds.SOLAR_GENERATOR, world, x, y, z);
+	
+	return true;
 
-	}
+}
 
 }

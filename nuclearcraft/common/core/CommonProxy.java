@@ -1,10 +1,13 @@
 package nuclearcraft.common.core;
 
+import java.util.logging.Level;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EnumRarity;
 import net.minecraft.src.World;
 import nuclearcraft.client.gui.GuiSolarGenerator;
 import nuclearcraft.common.container.ContainerSolarGenerator;
+import nuclearcraft.common.core.helper.LogHelper;
 import nuclearcraft.common.lib.GuiIds;
 import nuclearcraft.common.tile.TileSolarGenerator;
 import cpw.mods.fml.common.network.IGuiHandler;
