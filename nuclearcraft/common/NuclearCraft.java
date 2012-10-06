@@ -27,7 +27,7 @@ import nuclearcraft.common.lib.*;
 @NetworkMod(channels = { Reference.CHANNEL_NAME }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
 public class NuclearCraft {
 
-	@Instance
+	@Instance("NuclearCraft")
 	public static NuclearCraft instance;
 
 	@SidedProxy(clientSide = "nuclearcraft.client.core.ClientProxy", serverSide = "nuclearcraft.common.core.CommonProxy")

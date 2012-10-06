@@ -45,14 +45,16 @@ public class BlockSolarGenerator extends BlockNC {
 	}
 
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+		
+		TileSolarGenerator tileSolarGenerator = (TileSolarGenerator) world.getBlockTileEntity(x, y, z);
+		/**
+		if (tileSolarGenerator == null) {
+			return true;
+		}
 		if (world.isRemote) {
 			return true;
 		}
-		TileSolarGenerator tileSolarGenerator = (TileSolarGenerator) world.getBlockTileEntity(x, y, z);
-
-		if (tileSolarGenerator != null) {
-			return true;
-		}
+		**/
 		player.openGui(NuclearCraft.instance, GuiIds.SOLAR_GENERATOR, world, x, y, z);
 		return true;
 
